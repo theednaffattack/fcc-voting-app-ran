@@ -1,7 +1,8 @@
-import PropTypes from 'prop-types';
-import LinkList from '../../components/LinkList';
-import { Header as StyledHeader } from './styles';
-import connect from './store';
+/* eslint-disable */
+import PropTypes from "prop-types";
+import LinkList from "../../components/LinkList";
+import { Header as StyledHeader } from "./styles";
+import connect from "./store";
 
 const Header = ({ pathname, authenticated, actions: { logout } }) => (
   <StyledHeader>
@@ -26,3 +27,4 @@ Header.propTypes = {
 };
 
 export default connect(Header);
+/* eslint-enable */

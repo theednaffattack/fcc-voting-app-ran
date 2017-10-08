@@ -1,11 +1,12 @@
-import ApolloClient, { createNetworkInterface } from 'apollo-client';
-import persist from './persist';
+/*eslint-disable */
+import ApolloClient, { createNetworkInterface } from "apollo-client";
+import persist from "./persist";
 
 const initNetworkInterface = token => {
   const networkInterface = createNetworkInterface({
-    uri: 'https://api.graph.cool/simple/v1/cj7ke77fv0e9i0122pflagbvx',
+    uri: "http://localhost:3000/graphql", // https://api.graph.cool/simple/v1/cj7ke77fv0e9i0122pflagbvx
     opts: {
-      credentials: 'same-origin'
+      credentials: "same-origin"
     }
   });
 
@@ -47,3 +48,4 @@ export default (headers, token) => {
   }
   return apolloClient;
 };
+/* eslint-enable */

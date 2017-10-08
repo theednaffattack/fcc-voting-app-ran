@@ -120,7 +120,9 @@ modules.addTexttoFile = function addTexttoFile(
     },
     error => {
       if (error) {
+        /* eslint-disable no-console */
         return console.error('Error occurred:', error);
+        /* eslint-enable no-console */
       }
       cb();
     }

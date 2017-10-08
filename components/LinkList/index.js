@@ -1,23 +1,32 @@
-import PropTypes from 'prop-types';
-import { Link } from '../../routes';
-import { A, LogOutButton } from './styles';
+/*eslint-disable */
+import PropTypes from "prop-types"; // eslint disable prettier/prettier
+import { Link } from "../../routes"; // eslint disable prettier/prettier
+import { A, LogOutButton } from "./styles"; // eslint disable prettier/prettier
 
 const LinkList = ({ pathname, authenticated, logout }) => (
   <nav>
     <Link prefetch href="/" passHref>
-      <A active={pathname === '/'}>Main Page</A>
+      <A active={pathname === "/"}>Main Page</A>
     </Link>
     <Link prefetch route="create" passHref>
-      <A active={pathname === '/create_post'}>Create</A>
+      <A active={pathname === "/create"}>Create</A>
+    </Link>
+    <Link prefetch route="poll" passHref>
+      <A active={pathname === "/poll"}>Polls</A>
     </Link>
     {!authenticated && (
       <Link prefetch route="signin" passHref>
-        <A active={pathname === '/sign_in'}>SignIn</A>
+        <A active={pathname === "/sign_in"}>SignIn</A>
       </Link>
     )}
     {!authenticated && (
       <Link prefetch route="signup" passHref>
-        <A active={pathname === '/sign_up'}>SignUp</A>
+        <A active={pathname === "/sign_up"}>SignUp</A>
+      </Link>
+    )}
+    {authenticated && (
+      <Link prefetch route="mypolls" passHref>
+        <A active={pathname === "/my_polls"}>MyPolls</A>
       </Link>
     )}
     {authenticated && (
@@ -25,7 +34,7 @@ const LinkList = ({ pathname, authenticated, logout }) => (
         role="link"
         href="#"
         onClick={() => logout()}
-        active={pathname === '/sign_up'}
+        active={pathname === "/sign_up"}
       >
         LogOut
       </LogOutButton>
@@ -45,5 +54,6 @@ LinkList.propTypes = {
   authenticated: PropTypes.bool.isRequired,
   logout: PropTypes.func.isRequired
 };
+/* eslint-enable */
 
 export default LinkList;

@@ -1,0 +1,8 @@
+mutation createPoll($title: String!) {
+  createPoll(title: $title) {
+    id
+    title
+    votes
+    createdAt
+  }
+}

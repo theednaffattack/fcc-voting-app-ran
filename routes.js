@@ -1,4 +1,5 @@
-const routes = require('next-routes')();
+/*eslint-disable */
+const routes = require("next-routes")(); // eslint disable prettier/prettier
 
 //
 // Because of awesome Next.js, You don't need to add routes for all pages.
@@ -13,10 +14,13 @@ const routes = require('next-routes')();
 //
 // ------------ ROUTES ---------------
 // @RANStartRoutes
-routes.add('details', '/details/:postId/:postTitle');
-routes.add('create', '/create_post');
-routes.add('signin', '/sign_in');
-routes.add('signup', '/sign_up');
+routes.add("details", "/details/:postId/:postTitle"); // eslint disable prettier/prettier
+routes.add("poll", "/polls"); // eslint disable prettier/prettier
+routes.add("create", "/create_post"); // eslint disable prettier/prettier
+routes.add("signin", "/sign_in"); // eslint disable prettier/prettier
+routes.add("signup", "/sign_up");
+/* eslint-enable */
+
 // @RANEndRoutes
 // ------------ ROUTES ---------------
 //
