@@ -1,8 +1,9 @@
-import React from 'react';
-import PropTypes from 'prop-types';
-import AuthFields from '../AuthFields';
-import validate from '../AuthFields/validation';
-import connect from './store';
+/*eslint-disable */
+import React from "react";
+import PropTypes from "prop-types";
+import AuthFields from "../AuthFields";
+import validate from "../AuthFields/validation";
+import connect from "./store";
 
 class SignInForm extends React.Component {
   static propTypes = {
@@ -23,7 +24,13 @@ class SignInForm extends React.Component {
   getServerErrors(err) {
     if (err.graphQLErrors) {
       const obj = {};
-      obj.message = err.graphQLErrors[0].message;
+      obj.message = "some error\n" + JSON.stringify(err.graphQLErrors, null, 2); // err.graphQLErrors[0].message;
+      this.setState({
+        serverErrors: obj
+      });
+    } else {
+      const obj = {};
+      obj.message = err;
       this.setState({
         serverErrors: obj
       });
@@ -31,8 +38,8 @@ class SignInForm extends React.Component {
   }
 
   formFields = [
-    { key: 1, attr: { name: 'email', type: 'email', label: 'Email' } },
-    { key: 2, attr: { name: 'password', type: 'password', label: 'Password' } }
+    { key: 1, attr: { name: "email", type: "email", label: "Email" } },
+    { key: 2, attr: { name: "password", type: "password", label: "Password" } }
   ];
 
   handleTouch = () => {
@@ -112,3 +119,4 @@ class SignInForm extends React.Component {
 }
 
 export default connect(SignInForm);
+/* eslint-enable */

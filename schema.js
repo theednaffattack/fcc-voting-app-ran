@@ -94,10 +94,26 @@ const rootResolvers = {
       return Object.assign({ id: response.insertedIds[0] }, newUser);
     },
     signinUser: async (root, data, { mongo: { Users } }) => {
+      console.log("begin checking for user");
+      console.log(data);
       const user = await Users.findOne({ email: data.email.email });
-      if (data.email.password === user.password) {
+      console.log("*** user!!!");
+      console.log(user);
+      const valid = await bcrypt.compare(data.email.password, user.password);
+      console.log(`*** valid? ${valid}`);
+      if (valid) {
+        console.log(`*** inside if executing?: ${valid}`);
         return { token: `token-${user.email}`, user };
       }
+      return "Some kinda problem happened"; // { token: `token-${user.email}`, user };
+      // if (data.email.password === user.password) {
+      //   return { token: `token-${user.email}`, user };
+      // }
+      // if (!valid) {
+      //   throw Error("Incorrect password sucka!");
+      // }
+      // console.log("checked & decoded the hashed password");
+      // return { token: `token-${user.email}`, user };
     }
   },
 
