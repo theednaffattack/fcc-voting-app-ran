@@ -1,12 +1,13 @@
-import { graphql } from 'react-apollo';
-import createPollGql from './createPoll.gql';
+/*eslint-disable */
+import { graphql } from "react-apollo";
+import createPollGql from "./createPoll.gql";
 
 export const withMutation = graphql(createPollGql, {
   props: ({ mutate }) => ({
     mutations: {
-      createPoll: (title, url) =>
+      createPoll: (title, options) =>
         mutate({
-          variables: { title, url },
+          variables: { title, options },
           updateQueries: {
             allPolls: (previousResult, { mutationResult }) => {
               const newPoll = mutationResult.data.createPoll;
@@ -22,3 +23,4 @@ export const withMutation = graphql(createPollGql, {
 });
 
 export default comp => withMutation(comp);
+/* eslint-enable */

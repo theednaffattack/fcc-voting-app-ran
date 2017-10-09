@@ -1,8 +1,7 @@
-mutation createPoll($title: String!) {
-  createPoll(title: $title) {
+mutation createPoll($title: String!, $options: [String!]!) {
+  createPoll(title: $title, options: $options) {
     id
     title
-    votes
-    createdAt
+    options
   }
 }

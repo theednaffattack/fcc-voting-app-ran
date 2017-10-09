@@ -18,17 +18,27 @@ type User {
     email: String
 }
 
+type Poll {
+  id: ID!
+  title: String!
+  options: [String!]!
+}
+
 type Query {
   # User
   user: User
   allUsers: [User!]!
+  poll: Poll
+  allPolls: [Poll!]!
 }
 
 type Mutation {
   # Make a person!
-
   createUser(firstName: String!, lastName: String!, authProvider: AuthProviderSignupData!): User
   signinUser(email: AUTH_PROVIDER_EMAIL): SigninPayload!
+  createPoll(title: String!, options: [String!]!): Poll
+  # updatePoll(id: ID!, title: String, url: String, votes: Int): Poll  
+  # updateOrCreatePoll(update: UpdatePoll!, create: CreatePoll!): Poll
 }
 
 type SigninPayload {
@@ -55,9 +65,13 @@ schema {
 
 const rootResolvers = {
   Query: {
-    allUsers: async (root, data, { mongo: { Users } }) =>
+    allUsers: async (root, data, { mongo: { Users } }) => {
       // 1
-      Users.find({}).toArray() // 2
+      Users.find({}).toArray(); // 2
+    },
+    allPolls: async (root, data, { mongo: { Polls } }) => {
+      Polls.find({}).toArray();
+    }
   },
   Mutation: {
     // Add this block right after the `createLink` mutation resolver.
@@ -114,10 +128,22 @@ const rootResolvers = {
       // }
       // console.log("checked & decoded the hashed password");
       // return { token: `token-${user.email}`, user };
+    },
+    createPoll: async (root, data, { mongo: { Polls } }) => {
+      let newOptions = data.options;
+      newOptions = newOptions.toString().split(/\n/);
+      const newPoll = {
+        title: data.title,
+        options: newOptions
+      };
+      const response = await Polls.insert(newPoll);
+      return Object.assign({ id: response.insertedIds[0] }, newPoll);
     }
   },
-
   User: {
+    id: root => root._id || root.id // 5
+  },
+  Poll: {
     id: root => root._id || root.id // 5
   }
 };

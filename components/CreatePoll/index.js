@@ -1,8 +1,9 @@
-import React from 'react';
-import PropTypes from 'prop-types';
-import { Form, SubmitButton } from './styles';
-import { Router } from '../../routes';
-import connect from './store';
+/*eslint-disable */
+import React from "react";
+import PropTypes from "prop-types";
+import { Form, SubmitButton } from "./styles";
+import { Router } from "../../routes";
+import connect from "./store";
 
 class CreateForm extends React.Component {
   static propTypes = {
@@ -15,36 +16,32 @@ class CreateForm extends React.Component {
     e.preventDefault();
 
     const title = e.target.elements.title.value;
-    let url = e.target.elements.url.value;
+    let options = e.target.elements.options.value;
 
-    if (title === '' || url === '') {
+    if (title === "" || options === "") {
       // eslint-disable-next-line no-alert
-      window.alert('Both fields are required.');
+      window.alert("Both fields are required.");
       return false;
     }
 
-    // prepend http if missing from url
-    if (!url.match(/^[a-zA-Z]+:\/\//)) {
-      url = `http://${url}`;
-    }
-
-    this.props.mutations.createPoll(title, url);
+    this.props.mutations.createPoll(title, options);
 
     // reset form
-    e.target.elements.title.value = '';
-    e.target.elements.url.value = '';
+    e.target.elements.title.value = "";
+    e.target.elements.options.value = "";
 
-    Router.pushRoute('/');
+    Router.pushRoute("/polls");
   };
 
   render = () => (
     <Form onSubmit={this.handleSubmit}>
       <h1>Add new poll</h1>
       <input placeholder="title" name="title" />
-      <input placeholder="url" name="url" />
+      <textarea placeholder="options" name="options" cols="40" rows="5" />
       <SubmitButton type="submit">Submit</SubmitButton>
     </Form>
   );
 }
 
 export default connect(CreateForm);
+/* eslint-enable */

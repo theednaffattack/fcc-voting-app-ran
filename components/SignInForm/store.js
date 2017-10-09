@@ -1,7 +1,9 @@
-import { connect } from 'react-redux';
-import { graphql } from 'react-apollo';
-import { dispatchers } from '../AuthFields/store';
-import signInGql from './signinUser.gql';
+/*eslint-disable */
+
+import { connect } from "react-redux";
+import { graphql } from "react-apollo";
+import { dispatchers } from "../AuthFields/store";
+import signInGql from "./signinUser.gql";
 
 const withMutation = graphql(signInGql, {
   props: ({ mutate }) => ({
@@ -26,3 +28,4 @@ export default comp => {
   const compWithApollo = withMutation(comp);
   return connect(null, mapDispatchToProps)(compWithApollo);
 };
+/* eslint-enable */

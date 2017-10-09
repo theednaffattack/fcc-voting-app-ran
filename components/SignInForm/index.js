@@ -24,7 +24,7 @@ class SignInForm extends React.Component {
   getServerErrors(err) {
     if (err.graphQLErrors) {
       const obj = {};
-      obj.message = "some error\n" + JSON.stringify(err.graphQLErrors, null, 2); // err.graphQLErrors[0].message;
+      obj.message = err.graphQLErrors[0].message;
       this.setState({
         serverErrors: obj
       });

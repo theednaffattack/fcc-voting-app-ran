@@ -120,7 +120,7 @@ app.prepare().then(() => {
     });
     // passport.authenticate("jwt", { session: false }),
 
-    const user = await authenticate(req, mongo.Users).catch(error => {
+    var user = await authenticate(req, mongo.Users).catch(error => {
       console.log(`User authentication error ${error}`);
     });
     // const mongo = mongoose.connect(process.env.MONGODB_URL);
