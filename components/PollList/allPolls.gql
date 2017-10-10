@@ -1,0 +1,9 @@
+query allPolls($first: Int!, $skip: Int!) {
+  allPolls(first: $first, skip: $skip) {
+    id
+    title
+  }
+}
+# _allPollsMeta {
+#   count
+# }

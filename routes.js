@@ -14,7 +14,8 @@ const routes = require("next-routes")(); // eslint disable prettier/prettier
 //
 // ------------ ROUTES ---------------
 // @RANStartRoutes
-routes.add("details", "/details/:postId/:postTitle"); // eslint disable prettier/prettier
+// routes.add("details", "/details/:postId/:postTitle"); // eslint disable prettier/prettier
+routes.add("details", "/details/:pollId/:pollTitle"); // eslint disable prettier/prettier
 routes.add("poll", "/polls"); // eslint disable prettier/prettier
 routes.add("create", "/create_post"); // eslint disable prettier/prettier
 routes.add("signin", "/sign_in"); // eslint disable prettier/prettier

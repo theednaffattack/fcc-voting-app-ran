@@ -1,0 +1,9 @@
+query allOptions($first: Int!, $skip: Int!) {
+  allOptions(first: $first, skip: $skip) {
+    id
+    title
+  }
+}
+# _allOptionsMeta {
+#   count
+# }
