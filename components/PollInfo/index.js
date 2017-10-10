@@ -23,6 +23,8 @@ const PollInfo = ({ loading, Poll, error, pollTitle, pollId }) => {
     return;
   }
 
+  const voteOptions = Poll.options.map((option, index) => <div>{option}</div>);
+
   return (
     <Section>
       <h1>{Poll.title}</h1>
@@ -31,6 +33,7 @@ const PollInfo = ({ loading, Poll, error, pollTitle, pollId }) => {
           ID: <b>{Poll.id}</b>
         </span>
         <span>&nbsp;|&nbsp;</span>
+        {voteOptions}
       </div>
       <p>{/** TODO: put the list of questions here */}</p>
     </Section>
