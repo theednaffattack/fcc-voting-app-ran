@@ -23,10 +23,6 @@ const PollInfo = ({ loading, Poll, error, pollTitle, pollId }) => {
     return;
   }
 
-  const options = Poll.options.map((option, index) => (
-    <div key={index + 1}>{option}</div>
-  ));
-
   const voteOptions = Poll.voteOptions.map((voteOption, index) => (
     <div key={index + 1}>{voteOption.text}</div>
   ));
@@ -34,14 +30,15 @@ const PollInfo = ({ loading, Poll, error, pollTitle, pollId }) => {
   return (
     <Section>
       <h1>{Poll.title}</h1>
+      <small>
+        Posted by: {Poll.postedBy.firstName + " " + Poll.postedBy.lastName}
+      </small>
       <div>
         <span>
           ID: <b>{Poll.id}</b>
         </span>
-        {options}
+        {voteOptions}
       </div>
-      <div>{voteOptions}</div>
-      <p>{/** TODO: put the list of questions here */}</p>
     </Section>
   );
 };

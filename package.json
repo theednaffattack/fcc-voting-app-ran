@@ -2,8 +2,8 @@
   "name": "ran-boilerplate",
   "version": "0.6.1",
   "main": "server.js",
-  "description": "React . Apollo (GraphQL) . Next.js Boilerplate",
-  "author": "Ilker Guller <me@ilkerguller.com> (http://ilkerguller.com)",
+  "description": "Free Code Camp Voting App Challenge",
+  "author": "Eddie Naff <eddie@eddienaff.com> (http://eddienaff.com)",
   "license": "MIT",
   "repository": {
     "type": "git",
@@ -28,22 +28,23 @@
   },
   "pre-commit": "lint-staged",
   "lint-staged": {
-    "*.js": [
-      "eslint --fix",
-      "git add"
-    ]
+    "*.js": ["eslint --fix", "git add"]
   },
   "scripts": {
-    "start": "NODE_ENV=production node ./node_modules/.bin/pm2 start server.js -i max --attach",
+    "start":
+      "NODE_ENV=production node ./node_modules/.bin/pm2 start server.js -i max --attach",
     "build": "npm run clean-cache && next build",
     "clean-cache": "rm -rf ./node_modules/.cache",
     "dev": "npm run lint && npm run clean-cache && node server.js",
     "dev:next": "npm run lint && npm run clean-cache && next",
-    "start:next": "node ./node_modules/.bin/pm2 start npm --name \"next\" -- start",
-    "lint": "eslint --fix --ext .js pages components containers libraries server helper_scripts",
+    "start:next":
+      "node ./node_modules/.bin/pm2 start npm --name \"next\" -- start",
+    "lint":
+      "eslint --fix --ext .js pages components containers libraries server helper_scripts",
     "lint:watch": "esw -w --fix components libraries server",
     "analyze": "ANALYZE_BUILD=true npm run build",
-    "setup": "node ./helper_scripts/CL_commands/setup.js && npm run setup:after",
+    "setup":
+      "node ./helper_scripts/CL_commands/setup.js && npm run setup:after",
     "setup:after": "npm run build",
     "create:page": "node ./helper_scripts/CL_commands/create_page.js",
     "create:route": "node ./helper_scripts/CL_commands/create_route.js",
