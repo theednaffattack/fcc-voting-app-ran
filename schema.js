@@ -7,6 +7,8 @@ const {
   addErrorLoggingToSchema
 } = require("graphql-tools");
 
+// const { userLoader } = require("./dataloaders.js");
+
 const { ObjectID } = require("mongodb").ObjectID;
 const bcrypt = require("bcryptjs");
 // const { pubsub } = require("./subscriptions");
@@ -29,6 +31,7 @@ type Poll {
   votes: [Vote!]!
   postedBy: User
   options: [String!]!
+  voteOptions: [VoteOption!]!
 }
 
 type Vote {
@@ -53,12 +56,20 @@ input PollFilter {
   options_contains: String
 }
 
+type VoteOption {
+  id: ID!
+  text: String!
+  user: User!
+  poll: Poll!
+}
+
 type Mutation {
   # Make a person!
   createUser(firstName: String!, lastName: String!, authProvider: AuthProviderSignupData!): User
   signinUser(email: AUTH_PROVIDER_EMAIL): SigninPayload!
   createPoll(title: String!, options: [String!]!): Poll
   createVote(pollId: ID!): Vote
+  createVoteOption(pollId: ID!): VoteOption
   # updatePoll(id: ID!, title: String, url: String, votes: Int): Poll  
   # updateOrCreatePoll(update: UpdatePoll!, create: CreatePoll!): Poll
 }
@@ -115,11 +126,8 @@ const rootResolvers = {
       return await Polls.findOne({ _id: pollId });
     },
     Poll: async (root, data, { mongo: { Polls } }) => {
-      console.log("pollId = " + JSON.stringify(data, null, 2));
       const grabId = data._id;
-      console.log("grabId = " + JSON.stringify(grabId, null, 2));
-
-      var obj_id = new ObjectID(grabId);
+      const obj_id = new ObjectID(grabId);
       return await Polls.findOne(obj_id);
     }
   },
@@ -157,7 +165,7 @@ const rootResolvers = {
       }
       return "Some kinda problem happened"; // { token: `token-${user.email}`, user };
     },
-    createPoll: async (root, data, { mongo: { Polls }, user }) => {
+    createPoll: async (root, data, { mongo: { Polls, VoteOptions }, user }) => {
       let newOptions = data.options;
       newOptions = newOptions.toString().split(/\n/);
       data.options = newOptions;
@@ -168,6 +176,20 @@ const rootResolvers = {
         data
       );
       const response = await Polls.insert(newPoll);
+      const newVoteOption = {
+        userId: user && user._id,
+        pollId: new ObjectID(response.insertedIds[0])
+      };
+      let mappedOptions2 = newOptions.map(voteQuestion => {
+        return {
+          text: voteQuestion,
+          userId: user && user._id,
+          pollId: new ObjectID(response.insertedIds[0])
+        };
+      });
+      const optionsResponse = await VoteOptions.insert(mappedOptions2);
+      console.log("Writing to the VoteOptions collection");
+      console.log(JSON.stringify(optionsResponse, null, 2));
       return Object.assign({ id: response.insertedIds[0] }, newPoll);
     },
     createVote: async (root, data, { mongo: { Votes }, user }) => {
@@ -177,6 +199,13 @@ const rootResolvers = {
       };
       const response = await Votes.insert(newVote);
       return Object.assign({ id: response.insertedIds[0] }, newVote);
+    },
+    createVoteOption: async (root, data, { mongo: { VoteOptions } }) => {
+      const newVoteOption = {
+        userId: user && user._id,
+        pollId: new ObjectID(data.pollId)
+      };
+      return Object.assign({ id: response.insertedIds[0] }, newVoteOption);
     }
   },
   User: {
@@ -187,9 +216,21 @@ const rootResolvers = {
   },
   Poll: {
     id: root => root._id || root.id, // 5
-    postedBy: async ({ postedById }, data, { mongo: { Users } }) => {
-      return await userLoader.load(postedById);
+
+    postedBy: async ({ postedById }, data, { dataloaders: { userLoader } }) => {
+      // return await Users.findOne({ _id: postedById });
+      let mashedUpNaming = new ObjectID(postedById);
+      console.log(`
+      postedById: 
+      ${mashedUpNaming}`);
+      return await userLoader.load(mashedUpNaming).catch(error => {
+        console.log(`Resolver 'postedBy' error ${error}`);
+      });
     },
+    voteOptions: async ({ _id }, data, { mongo: { VoteOptions } }) => {
+      return await VoteOptions.find({ pollId: _id }).toArray();
+    },
+
     votes: async ({ _id }, data, { mongo: { Votes } }) => {
       return await Votes.find({ pollId: _id }).toArray();
     }
@@ -203,6 +244,16 @@ const rootResolvers = {
     poll: async ({ pollId }, data, { mongo: { Polls } }) => {
       let newPollId = pollId;
       return await Polls.findOne({ _id: newPollId });
+    }
+  },
+  VoteOption: {
+    id: root => root._id || root.id,
+    user: async ({ userId }, data, { mongo: { Users } }) => {
+      // return await userLoader.load(postedById);
+      return await Users.findOne({ _id: userId });
+    },
+    poll: async ({ pollId }, data, { mongo: { Polls } }) => {
+      return await Polls.findOne({ _id: pollId });
     }
   }
 };

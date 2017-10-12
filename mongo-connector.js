@@ -19,7 +19,8 @@ module.exports = async () => {
     // Links: db.collection("links"),
     Users: db.collection("users"),
     Votes: db.collection("votes"),
-    Polls: db.collection("polls")
+    Polls: db.collection("polls"),
+    VoteOptions: db.collection("voteOptions")
     // Questions: db.collection("questions"),
     // PollVotes: db.collection("pollVotes")
   };

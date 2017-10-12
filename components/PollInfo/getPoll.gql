@@ -1,7 +1,14 @@
 query getPoll($pollId: ID!) {
   Poll(_id: $pollId) {
     id
-    title
     options
+    postedBy {
+      firstName
+      lastName
+    }
+    voteOptions {
+      text
+    }
+    title
   }
 }

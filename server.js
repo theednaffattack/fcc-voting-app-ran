@@ -106,7 +106,11 @@ app.prepare().then(() => {
     })
   );
 
-  server.use(bodyParser.urlencoded({ extended: true }));
+  server.use(
+    bodyParser.urlencoded({
+      extended: true
+    })
+  );
   server.use(bodyParser.json());
 
   // 2: use setupLocalLogin below to add auth routes
@@ -118,12 +122,10 @@ app.prepare().then(() => {
     const mongo = await connectMongo().catch(error => {
       console.log(`Mongo connection error ${error}`);
     });
-    // passport.authenticate("jwt", { session: false }),
 
     var user = await authenticate(req, mongo.Users).catch(error => {
       console.log(`User authentication error ${error}`);
     });
-    // const mongo = mongoose.connect(process.env.MONGODB_URL);
 
     const query = req.query.query || req.body.query;
     if (query && query.length > 2000) {
@@ -132,7 +134,7 @@ app.prepare().then(() => {
     return {
       context: {
         dataloaders: buildDataLoaders(mongo),
-        mongo,
+        mongo: mongo,
         user
       }, // this context object is passed to all resolvers.,
       formatError: ({ message, stack }) => ({
@@ -151,8 +153,8 @@ app.prepare().then(() => {
   server.use(
     "/graphiql",
     graphiqlExpress({
-      endpointURL: "/graphql"
-      // passHeader: `'Authorization': 'bearer eddie-auth-token'`,
+      endpointURL: "/graphql",
+      passHeader: `'Authorization': 'Bearer token-one@one.com'`
       // subscriptionsEndpoint: `ws://localhost:${PORT}/subscriptions`
     })
   );
