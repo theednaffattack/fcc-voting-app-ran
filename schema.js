@@ -221,11 +221,11 @@ const rootResolvers = {
 
     postedBy: async ({ postedById }, data, { dataloaders: { userLoader } }) => {
       // return await Users.findOne({ _id: postedById });
-      let mashedUpNaming = new ObjectID(postedById);
+      let mongoIdPostedById = new ObjectID(postedById);
       console.log(`
       postedById: 
-      ${mashedUpNaming}`);
-      return await userLoader.load(mashedUpNaming).catch(error => {
+      ${mongoIdPostedById}`);
+      return await userLoader.load(postedById).catch(error => {
         console.log(`Resolver 'postedBy' error ${error}`);
       });
     },
@@ -240,8 +240,10 @@ const rootResolvers = {
   Vote: {
     id: root => root._id || root.id,
 
-    user: async ({ userId }, data, { mongo: { Users } }) => {
-      return await Users.findOne({ _id: userId });
+    user: async ({ userId }, data, { dataloaders: { userLoader } }) => {
+      return await userLoader.load(postedById).catch(error => {
+        console.log(`Resolver 'postedBy' error ${error}`);
+      });
     },
     voteOption: async ({ voteOption }, data, { mongo: { VoteOptions } }) => {
       let newVoteOptionId = voteOption;
@@ -257,8 +259,8 @@ const rootResolvers = {
     poll: async ({ pollId }, data, { mongo: { Polls } }) => {
       return await Polls.findOne({ _id: pollId });
     },
-    votes: async ({ id }, data, { mongo: { Votes } }) => {
-      return await Votes.find({ voteOption: id }).toArray();
+    votes: async ({ _id }, data, { mongo: { Votes } }) => {
+      return await Votes.find({ voteOption: _id }).toArray();
     }
   }
 };

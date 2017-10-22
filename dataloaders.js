@@ -13,7 +13,7 @@ module.exports = ({ Users, VoteOptions }) => ({
   userLoader: new DataLoader(keys => batchUsers(Users, keys), {
     cacheKeyFn: key => key.toString()
   }),
-  voteOptionLoader: new DataLoader(
+  voteOptionsLoader: new DataLoader(
     keys => batchVoteOptions(VoteOptions, keys),
     {
       cacheKeyFn: key => key.toString()

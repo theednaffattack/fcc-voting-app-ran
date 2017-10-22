@@ -10,7 +10,7 @@ module.exports = async () => {
   const db = await MongoClient.connect(process.env.MONGODB_URI);
   let logCount = 0;
   Logger.setCurrentLogger((msg, state) => {
-    console.log(`MONGO DB REQUEST ${++logCount}: ${msg}`);
+    console.log(`\nMONGO DB REQUEST ${++logCount}: ${msg}`);
   });
   Logger.setLevel("debug");
   Logger.filter("class", ["Cursor"]);
