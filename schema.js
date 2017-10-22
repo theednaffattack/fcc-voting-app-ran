@@ -241,7 +241,7 @@ const rootResolvers = {
     id: root => root._id || root.id,
 
     user: async ({ userId }, data, { dataloaders: { userLoader } }) => {
-      return await userLoader.load(postedById).catch(error => {
+      return await userLoader.load(userId).catch(error => {
         console.log(`Resolver 'postedBy' error ${error}`);
       });
     },
@@ -252,9 +252,10 @@ const rootResolvers = {
   },
   VoteOption: {
     id: root => root._id || root.id,
-    user: async ({ userId }, data, { mongo: { Users } }) => {
-      // return await userLoader.load(postedById);
-      return await Users.findOne({ _id: userId });
+    user: async ({ userId }, data, { dataloaders: { userLoader } }) => {
+      return await userLoader.load(userId).catch(error => {
+        console.log(`Resolver 'postedBy' error ${error}`);
+      });
     },
     poll: async ({ pollId }, data, { mongo: { Polls } }) => {
       return await Polls.findOne({ _id: pollId });
