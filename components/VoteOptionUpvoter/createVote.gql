@@ -1,0 +1,7 @@
+mutation createVote($voteOption: ID!) {
+  createVote(voteOption: $voteOption) {
+    id
+    __typename
+    # votes
+  }
+}

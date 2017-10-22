@@ -4,6 +4,7 @@
 import PropTypes from "prop-types";
 import { Section, A } from "./styles";
 import connect from "./store";
+import VoteOptionUpvoter from "../VoteOptionUpvoter";
 
 // USE BELOW VOTE OPTION MAPPING (NEEDED TO VOTE) // {allOptions.map((option, index) => ())}
 
@@ -24,7 +25,10 @@ const PollInfo = ({ loading, Poll, error, pollTitle, pollId }) => {
   }
 
   const voteOptions = Poll.voteOptions.map((voteOption, index) => (
-    <div key={index + 1}>{voteOption.text}</div>
+    <div key={index + 1}>
+      {voteOption.text}
+      <VoteOptionUpvoter voteOption={voteOption.id} />
+    </div>
   ));
 
   return (

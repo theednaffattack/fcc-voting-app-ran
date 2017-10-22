@@ -1,4 +1,4 @@
-mutation updatePost($id: ID!, $votes: Int) {
+mutation updateVoteOption($id: ID!, $votes: Int) {
   updateVoteOption(id: $id, votes: $votes) {
     id
     __typename

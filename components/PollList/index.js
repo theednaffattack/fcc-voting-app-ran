@@ -1,7 +1,6 @@
 /*eslint-disable */
 import PropTypes from "prop-types";
 import { Link } from "../../routes";
-import PollUpvoter from "../PollUpvoter";
 import {
   Main,
   ItemList,
@@ -37,7 +36,6 @@ const PollList = ({
                   <Title>{poll.title}</Title>
                 </Link>
                 {poll.id}
-                <PollUpvoter id={poll.id} votes={poll.votes} />
               </div>
             </Item>
           ))}

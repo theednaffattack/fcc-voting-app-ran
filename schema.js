@@ -37,7 +37,7 @@ type Poll {
 type Vote {
   id: ID!
   user: User!
-  poll: Poll!
+  voteOption: VoteOption!
 }
 
 type Query {
@@ -61,6 +61,7 @@ type VoteOption {
   text: String!
   user: User!
   poll: Poll!
+  votes: [Vote!]!
 }
 
 type Mutation {
@@ -68,7 +69,7 @@ type Mutation {
   createUser(firstName: String!, lastName: String!, authProvider: AuthProviderSignupData!): User
   signinUser(email: AUTH_PROVIDER_EMAIL): SigninPayload!
   createPoll(title: String!, options: [String!]!): Poll
-  createVote(pollId: ID!): Vote
+  createVote(voteOption: ID!): Vote
   createVoteOption(pollId: ID!): VoteOption
   # updatePoll(id: ID!, title: String, url: String, votes: Int): Poll  
   # updateOrCreatePoll(update: UpdatePoll!, create: CreatePoll!): Poll
@@ -195,8 +196,9 @@ const rootResolvers = {
     createVote: async (root, data, { mongo: { Votes }, user }) => {
       const newVote = {
         userId: user && user._id,
-        pollId: new ObjectID(data.pollId)
+        voteOption: new ObjectID(data.voteOption)
       };
+      console.log(newVote);
       const response = await Votes.insert(newVote);
       return Object.assign({ id: response.insertedIds[0] }, newVote);
     },
@@ -241,9 +243,9 @@ const rootResolvers = {
     user: async ({ userId }, data, { mongo: { Users } }) => {
       return await Users.findOne({ _id: userId });
     },
-    poll: async ({ pollId }, data, { mongo: { Polls } }) => {
-      let newPollId = pollId;
-      return await Polls.findOne({ _id: newPollId });
+    voteOption: async ({ voteOption }, data, { mongo: { VoteOptions } }) => {
+      let newVoteOptionId = voteOption;
+      return await VoteOptions.findOne({ _id: newVoteOptionId });
     }
   },
   VoteOption: {
@@ -254,6 +256,9 @@ const rootResolvers = {
     },
     poll: async ({ pollId }, data, { mongo: { Polls } }) => {
       return await Polls.findOne({ _id: pollId });
+    },
+    votes: async ({ id }, data, { mongo: { Votes } }) => {
+      return await Votes.find({ voteOption: id }).toArray();
     }
   }
 };

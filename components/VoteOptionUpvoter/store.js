@@ -1,19 +1,11 @@
 import { graphql } from "react-apollo";
-import upvoteVoteOptionGql from "./upvoteVoteOption.gql";
+import createVoteGql from "./createVote.gql";
 
-const withMutation = graphql(upvoteVoteOptionGql, {
-  props: ({ ownProps, mutate }) => ({
-    upvote: (id, votes) =>
+const withMutation = graphql(createVoteGql, {
+  props: ({ mutate }) => ({
+    upvote: voteOption =>
       mutate({
-        variables: { id, votes },
-        optimisticResponse: {
-          __typename: "Mutation",
-          createVote: {
-            __typename: "VoteOption",
-            id: ownProps.id,
-            votes: ownProps.votes + 1
-          }
-        }
+        variables: { voteOption }
       })
   })
 });
