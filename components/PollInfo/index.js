@@ -5,7 +5,7 @@ import PropTypes from "prop-types";
 import { Section, A, Item, Title, TitleCount } from "./styles";
 import connect from "./store";
 import VoteOptionUpvoter from "../VoteOptionUpvoter";
-
+import SVGChart from "../SVGChart";
 // USE BELOW VOTE OPTION MAPPING (NEEDED TO VOTE) // {allOptions.map((option, index) => ())}
 
 const PollInfo = ({ loading, Poll, error, pollTitle, pollId }) => {
@@ -34,6 +34,11 @@ const PollInfo = ({ loading, Poll, error, pollTitle, pollId }) => {
     </Item>
   ));
 
+  const voteOptionsData = Poll.voteOptions.map((voteOption, index) => ({
+    text: voteOption.text,
+    votesCount: voteOption.votesCount
+  }));
+
   return (
     <Section>
       <h1>{Poll.title}</h1>
@@ -41,6 +46,7 @@ const PollInfo = ({ loading, Poll, error, pollTitle, pollId }) => {
         Posted by: {Poll.postedBy.firstName + " " + Poll.postedBy.lastName}
       </small>
       <div>{voteOptions}</div>
+      <SVGChart width={600} height={300} data={voteOptionsData} />
     </Section>
   );
 };
