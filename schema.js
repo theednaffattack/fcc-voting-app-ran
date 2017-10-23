@@ -53,7 +53,7 @@ type Query {
 input PollFilter {
   OR: [PollFilter!]
   title_contains: String
-  options_contains: String
+  voteOptions_contains: String
 }
 
 type VoteOption {
@@ -62,6 +62,7 @@ type VoteOption {
   user: User!
   poll: Poll!
   votes: [Vote!]!
+  votesCount: Int!
 }
 
 type Mutation {
@@ -96,19 +97,20 @@ schema {
 
 `
 ];
-function buildFilters({ OR = [], title_contains, options_contains }) {
-  const filter = title_contains || options_contains ? {} : null;
+function buildFilters({ OR = [], title_contains, voteOptions_contains }) {
+  const filter = title_contains || voteOptions_contains ? {} : null;
   if (title_contains) {
     filter.title = { $regex: `.*${title_contains}.*` };
   }
-  if (options_contains) {
-    filter.options = { $regex: `.*${options_contains}.*` };
+  if (voteOptions_contains) {
+    filter.voteOptions = { $regex: `.*${voteOptions_contains}.*` };
   }
 
   let filters = filter ? [filter] : [];
   for (let i = 0; i < OR.length; i++) {
     filters = filters.concat(buildFilters(OR[i]));
   }
+  console.log("");
   return filters;
 }
 
@@ -220,11 +222,6 @@ const rootResolvers = {
     id: root => root._id || root.id, // 5
 
     postedBy: async ({ postedById }, data, { dataloaders: { userLoader } }) => {
-      // return await Users.findOne({ _id: postedById });
-      let mongoIdPostedById = new ObjectID(postedById);
-      console.log(`
-      postedById: 
-      ${mongoIdPostedById}`);
       return await userLoader.load(postedById).catch(error => {
         console.log(`Resolver 'postedBy' error ${error}`);
       });
@@ -232,7 +229,6 @@ const rootResolvers = {
     voteOptions: async ({ _id }, data, { mongo: { VoteOptions } }) => {
       return await VoteOptions.find({ pollId: _id }).toArray();
     },
-
     votes: async ({ _id }, data, { mongo: { Votes } }) => {
       return await Votes.find({ pollId: _id }).toArray();
     }
@@ -245,9 +241,8 @@ const rootResolvers = {
         console.log(`Resolver 'postedBy' error ${error}`);
       });
     },
-    voteOption: async ({ voteOption }, data, { mongo: { VoteOptions } }) => {
-      let newVoteOptionId = voteOption;
-      return await VoteOptions.findOne({ _id: newVoteOptionId });
+    voteOption: async ({ _id }, data, { mongo: { VoteOptions } }) => {
+      return await VoteOptions.find({ pollId: _id }).toArray();
     }
   },
   VoteOption: {
@@ -262,6 +257,10 @@ const rootResolvers = {
     },
     votes: async ({ _id }, data, { mongo: { Votes } }) => {
       return await Votes.find({ voteOption: _id }).toArray();
+    },
+    votesCount: async ({ _id }, data, { mongo: { Votes } }) => {
+      let theCount = await Votes.find({ voteOption: _id }).toArray();
+      return theCount.length;
     }
   }
 };

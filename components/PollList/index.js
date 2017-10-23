@@ -35,7 +35,6 @@ const PollList = ({
                 >
                   <Title>{poll.title}</Title>
                 </Link>
-                {poll.id}
               </div>
             </Item>
           ))}

@@ -1,7 +1,7 @@
-import moment from 'moment';
-import PropTypes from 'prop-types';
-import { Section, A } from './styles';
-import connect from './store';
+import moment from "moment";
+import PropTypes from "prop-types";
+import { Section, A } from "./styles";
+import connect from "./store";
 
 const PostInfo = ({ loading, Post, error }) => {
   if (loading) {
@@ -14,7 +14,7 @@ const PostInfo = ({ loading, Post, error }) => {
 
   if (error) {
     console.log(error); // eslint-disable-line no-console
-    window.alert('Load error, check console'); // eslint-disable-line no-alert
+    window.alert("Load error, check console"); // eslint-disable-line no-alert
     return;
   }
 
@@ -27,8 +27,8 @@ const PostInfo = ({ loading, Post, error }) => {
         </span>
         <span>&nbsp;|&nbsp;</span>
         <span>
-          Created At: {' '}
-          <b>{moment(Post.createdAt).format('DD.MM.YYYY kk:mm')}</b>
+          Created At: {" "}
+          <b>{moment(Post.createdAt).format("DD.MM.YYYY kk:mm")}</b>
         </span>
       </div>
       <p>

@@ -2,7 +2,7 @@
 
 // import moment from "moment";
 import PropTypes from "prop-types";
-import { Section, A } from "./styles";
+import { Section, A, Item, Title, TitleCount } from "./styles";
 import connect from "./store";
 import VoteOptionUpvoter from "../VoteOptionUpvoter";
 
@@ -25,10 +25,13 @@ const PollInfo = ({ loading, Poll, error, pollTitle, pollId }) => {
   }
 
   const voteOptions = Poll.voteOptions.map((voteOption, index) => (
-    <div key={index + 1}>
-      {voteOption.text}
-      <VoteOptionUpvoter voteOption={voteOption.id} />
-    </div>
+    <Item key={voteOption.text}>
+      <div key={index + 1}>
+        <Title>{voteOption.text}</Title>
+        <VoteOptionUpvoter voteOption={voteOption.id} />
+        <TitleCount>{voteOption.votesCount}</TitleCount>
+      </div>
+    </Item>
   ));
 
   return (
@@ -37,12 +40,7 @@ const PollInfo = ({ loading, Poll, error, pollTitle, pollId }) => {
       <small>
         Posted by: {Poll.postedBy.firstName + " " + Poll.postedBy.lastName}
       </small>
-      <div>
-        <span>
-          ID: <b>{Poll.id}</b>
-        </span>
-        {voteOptions}
-      </div>
+      <div>{voteOptions}</div>
     </Section>
   );
 };

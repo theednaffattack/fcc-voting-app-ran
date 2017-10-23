@@ -9,6 +9,7 @@ query getPoll($pollId: ID!) {
     voteOptions {
       text
       id
+      votesCount
     }
     title
   }
